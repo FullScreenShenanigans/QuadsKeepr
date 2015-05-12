@@ -3,13 +3,13 @@
 interface IQuadsKeeprSettings {
     // An ObjectMakr used to create Quadrants.
     ObjectMaker: ObjectMakr;
-    
+
     // How many QuadrantRows to keep at a time.
     numRows: number;
-     
+
     // How many QuadrantCols to keep at a time.
     numCols: number;
-     
+
     // How wide each Quadrant should be.
     quadrantWidth: number;
 
@@ -81,7 +81,7 @@ interface IThing {
 }
 
 interface IThingsCollection {
-    (i: string): IThing[]
+    (i: string): IThing[];
 }
 
 interface IThingsCounter {
@@ -137,45 +137,45 @@ class QuadsKeepr {
 
     // The ObjectMakr factory used to create Quadrant objects.
     private ObjectMaker: ObjectMakr;
-        
+
     // How many rows and columns of Quadrants there should be initially.
     private numRows: number;
     private numCols: number;
-        
+
     // Scrolling offsets during gameplay (initially 0).
     private offsetX: number;
     private offsetY: number;
-        
+
     // Starting coordinates for rows & columns.
     private startLeft: number;
     private startTop: number;
-        
+
     // A QuadrantRow[] that holds each QuadrantRow in order.
     private quadrantRows: IQuadrantRow[];
-        
+
     // A QuadrantCol[] that holds each QuadrantCol in order.
     private quadrantCols: IQuadrantCol[];
-        
+
     // How wide Quadrants should be.
     private quadrantWidth: number;
-        
+
     // How tall Quadrants should be.
     private quadrantHeight: number;
 
     // Names under which external Things should store information
-    private keyTop: string
-    private keyRight: string
-    private keyBottom: string
-    private keyLeft: string
-    private keyNumQuads: string
-    private keyQuadrants: string
-    private keyChanged: string
-    private keyToleranceX: string
-    private keyToleranceY: string
-    private keyGroupName: string
-    private keyOffsetX: string
-    private keyOffsetY: string
-        
+    private keyTop: string;
+    private keyRight: string;
+    private keyBottom: string;
+    private keyLeft: string;
+    private keyNumQuads: string;
+    private keyQuadrants: string;
+    private keyChanged: string;
+    private keyToleranceX: string;
+    private keyToleranceY: string;
+    private keyGroupName: string;
+    private keyOffsetX: string;
+    private keyOffsetY: string;
+
     // An Array of string names a Thing may be placed into 
     private groupNames: string[];
 
@@ -239,54 +239,54 @@ class QuadsKeepr {
         this.keyOffsetX = settings.keyOffsetX;
         this.keyOffsetY = settings.keyOffsetY;
     }
-    
-    
+
+
     /* Simple gets
     */
-    
+
     /**
      * @return {Object} The listing of Quadrants grouped by row.
      */
     getQuadrantRows(): IQuadrantRow[] {
         return this.quadrantRows;
     }
-    
+
     /**
      * @return {Object} The listing of Quadrants grouped by column.
      */
     getQuadrantCols(): IQuadrantCol[] {
         return this.quadrantCols;
     }
-    
+
     /**
      * @return {Number} How many Quadrant rows there are.
      */
     getNumRows(): number {
         return this.numRows;
     }
-    
+
     /**
      * @return {Number} How many Quadrant columns there are.
      */
     getNumCols(): number {
         return this.numCols;
     }
-    
+
     /**
      * @return {Number} How wide each Quadrant is.
      */
     getQuadrantWidth(): number {
         return this.quadrantWidth;
     }
-    
+
     /**
      * @return {Number} How high each Quadrant is.
      */
     getQuadrantHeight(): number {
         return this.quadrantHeight;
     }
-    
-    
+
+
     /* Quadrant updates
     */
 
@@ -347,7 +347,7 @@ class QuadsKeepr {
             this.onAdd("xInc", this.top, this.right, this.bottom, this.left);
         }
     }
-    
+
     /**
      * Shifts each Quadrant horizontally and vertically, along with the row and
      * column containers. Offsets are adjusted to check for row or column 
@@ -356,8 +356,9 @@ class QuadsKeepr {
      * @param {Number} dx   How much to shfit horizontally (will be rounded).
      * @param {Number} dy   How much to shift vertically (will be rounded).
      */
-    shiftQuadrants(dx: number = 0, dy: number = 0) {
-        var row, col;
+    shiftQuadrants(dx: number = 0, dy: number = 0): void {
+        var row: number,
+            col: number;
 
         dx = dx | 0;
         dy = dy | 0;
@@ -414,7 +415,7 @@ class QuadsKeepr {
 
         return row;
     }
-    
+
     /**
      * Adds a QuadrantCol to the end of the quadrantCols Array.
      * 
@@ -440,14 +441,14 @@ class QuadsKeepr {
 
         return col;
     }
-    
+
     /**
      * Removes the last QuadrantRow from the end of the quadrantRows Array.
      * 
      * @param {Boolean} [callUpdate]   Whether this should call the onRemove 
      *                                 trigger with the new row's bounding box.
      */
-    popQuadrantRow(callUpdate: boolean = false) {
+    popQuadrantRow(callUpdate: boolean = false): void {
         for (var i: number = 0; i < this.quadrantCols.length; i += 1) {
             this.quadrantCols[i].quadrants.pop();
         }
@@ -461,14 +462,14 @@ class QuadsKeepr {
 
         this.bottom -= this.quadrantHeight;
     }
-    
+
     /**
      * Removes the last QuadrantCol from the end of the quadrantCols Array.
      * 
      * @param {Boolean} [callUpdate]   Whether this should call the onRemove
      *                                 trigger with the new row's bounding box.
      */
-    popQuadrantCol(callUpdate: boolean = false) {
+    popQuadrantCol(callUpdate: boolean = false): void {
         for (var i: number = 0; i < this.quadrantRows.length; i += 1) {
             this.quadrantRows[i].quadrants.pop();
         }
@@ -482,14 +483,14 @@ class QuadsKeepr {
 
         this.right -= this.quadrantWidth;
     }
-    
+
     /**
      * Adds a QuadrantRow to the beginning of the quadrantRows Array.
      * 
      * @param {Boolean} [callUpdate]   Whether this should call the onAdd 
      *                                 trigger with the new row's bounding box.
      */
-    unshiftQuadrantRow(callUpdate: boolean = false) {
+    unshiftQuadrantRow(callUpdate: boolean = false): IQuadrantRow {
         var row: IQuadrantRow = this.createQuadrantRow(this.left, this.top - this.quadrantHeight),
             i: number;
 
@@ -508,7 +509,7 @@ class QuadsKeepr {
 
         return row;
     }
-    
+
     /**
      * Adds a QuadrantCol to the beginning of the quadrantCols Array.
      * 
@@ -534,7 +535,7 @@ class QuadsKeepr {
 
         return col;
     }
-    
+
     /**
      * Removes a QuadrantRow from the beginning of the quadrantRows Array.
      * 
@@ -555,7 +556,7 @@ class QuadsKeepr {
 
         this.top += this.quadrantHeight;
     }
-    
+
     /**
      * Removes a QuadrantCol from the beginning of the quadrantCols Array.
      * 
@@ -576,11 +577,11 @@ class QuadsKeepr {
 
         this.left += this.quadrantWidth;
     }
-    
-    
+
+
     /* Thing manipulations
     */
-    
+
     /**
      * Determines the Quadrants for an entire Array of Things. This is done by
      * wiping each quadrant's memory of that Array's group type and determining
@@ -589,7 +590,7 @@ class QuadsKeepr {
      * @param {String} group   The name of the group to have Quadrants determined.
      * @param {Thing[]} things   The listing of Things in that group.
      */
-    determineAllQuadrants(group: string, things: IThing[]) {
+    determineAllQuadrants(group: string, things: IThing[]): void {
         var row: number,
             col: number;
 
@@ -601,7 +602,7 @@ class QuadsKeepr {
 
         things.forEach(this.determineThingQuadrants);
     }
-    
+
     /**
      * Determines the Quadrants for a single Thing. The starting row and column
      * indices are calculated so every Quadrant within them should contain the
@@ -618,13 +619,13 @@ class QuadsKeepr {
             colEnd: number = this.findQuadrantColEnd(thing),
             row: number,
             col: number;
-        
+
         // Mark each of the Thing's Quadrants as changed
         // This is done first because the old Quadrants are changed
         if (thing[this.keyChanged]) {
             this.markThingQuadrantsChanged(thing);
         }
-        
+
         // The Thing no longer has any Quadrants: rebuild them!
         thing[this.keyNumQuads] = 0;
 
@@ -633,11 +634,11 @@ class QuadsKeepr {
                 this.setThingInQuadrant(thing, this.quadrantRows[row].quadrants[col], group);
             }
         }
-        
+
         // The thing is no longer considered changed, since quadrants know it
         thing[this.keyChanged] = false;
     }
-    
+
     /**
      * Sets a Thing to be inside a Quadrant. The two are marked so they can
      * recognize each other's existence later.
@@ -647,15 +648,15 @@ class QuadsKeepr {
      * @param {String} group   The grouping under which the Quadrant should
      *                         store the Thing.
      */
-    setThingInQuadrant(thing: IThing, quadrant: IQuadrant, group: string) {
+    setThingInQuadrant(thing: IThing, quadrant: IQuadrant, group: string): void {
         // Mark the Quadrant in the Thing
         thing[this.keyQuadrants][thing[this.keyNumQuads]] = quadrant;
         thing[this.keyNumQuads] += 1;
-        
+
         // Mark the Thing in the Quadrant
         quadrant.things[group][quadrant.numthings[group]] = thing;
         quadrant.numthings[group] += 1;
-        
+
         // If necessary, mark the Quadrant as changed
         if (thing[this.keyChanged]) {
             quadrant.changed = true;
@@ -678,21 +679,21 @@ class QuadsKeepr {
             this.pushQuadrantCol(true);
             this.offsetX += this.quadrantWidth;
         }
-        
+
         // Quadrant shift: add to the left
         while (this.offsetX > this.quadrantWidth) {
             this.popQuadrantCol(true);
             this.unshiftQuadrantCol(true);
             this.offsetX -= this.quadrantWidth;
         }
-        
+
         // Quadrant shift: add to the bottom
         while (-this.offsetY > this.quadrantHeight) {
             this.unshiftQuadrantRow(true);
             this.pushQuadrantRow(true);
             this.offsetY += this.quadrantHeight;
         }
-        
+
         // Quadrant shift: add to the top
         while (this.offsetY > this.quadrantHeight) {
             this.popQuadrantRow(true);
@@ -700,25 +701,25 @@ class QuadsKeepr {
             this.offsetY -= this.quadrantHeight;
         }
     }
-    
+
     /**
      * Shifts a Quadrant horizontally and vertically.
      * 
      * @param {Number} dx
      * @param {Number} dy
      */
-    private shiftQuadrant(quadrant: IQuadrant, dx: number, dy: number) {
+    private shiftQuadrant(quadrant: IQuadrant, dx: number, dy: number): void {
         quadrant.top += dy;
         quadrant.right += dx;
         quadrant.bottom += dy;
         quadrant.left += dx;
         quadrant.changed = true;
     }
-    
-    
+
+
     /* Quadrant placements
     */
-    
+
     /**
      * Creates a new Quadrant using the internal ObjectMaker. The Quadrant's
      * sizing and position are set, along with a canvas element for rendering.
@@ -727,7 +728,7 @@ class QuadsKeepr {
      * @param {Number} top   The vertical displacement of the Quadrant.
      * @return {Quadrant}
      */
-    private createQuadrant(left: number, top: number) {
+    private createQuadrant(left: number, top: number): IQuadrant {
         var quadrant: IQuadrant = (<(type: string) => IQuadrant>this.ObjectMaker.make)("Quadrant"),
             i: number;
 
@@ -750,7 +751,7 @@ class QuadsKeepr {
 
         return quadrant;
     }
-    
+
     /**
      * Creates a QuadrantRow, with length determined by numCols.
      * 
@@ -773,7 +774,7 @@ class QuadsKeepr {
 
         return row;
     }
-    
+
     /**
      * Creates a QuadrantCol, with length determined by numRow.
      * 
@@ -852,16 +853,16 @@ class QuadsKeepr {
             return thing[this.keyLeft];
         }
     }
-    
+
     /** 
      * Marks all Quadrants a Thing is contained within as changed.
      */
     private markThingQuadrantsChanged(thing: IThing): void {
-        for (var i = 0; i < thing[this.keyNumQuads]; i += 1) {
+        for (var i: number = 0; i < thing[this.keyNumQuads]; i += 1) {
             thing[this.keyQuadrants][i].changed = true;
         }
     }
-    
+
     /**
      * @param {Thing} thing
      * @param {Number} The index of the first row the Thing is inside.
@@ -869,7 +870,7 @@ class QuadsKeepr {
     private findQuadrantRowStart(thing: IThing): number {
         return Math.max(Math.floor((this.getTop(thing) - this.top) / this.quadrantHeight), 0);
     }
-    
+
     /**
      * @param {Thing} thing
      * @param {Number} The index of the last row the Thing is inside.
@@ -877,7 +878,7 @@ class QuadsKeepr {
     private findQuadrantRowEnd(thing: IThing): number {
         return Math.min(Math.floor((this.getBottom(thing) - this.top) / this.quadrantHeight), this.numRows - 1);
     }
-    
+
     /**
      * @param {Thing} thing
      * @param {Number} The index of the first column the Thing is inside.
@@ -885,7 +886,7 @@ class QuadsKeepr {
     private findQuadrantColStart(thing: IThing): number {
         return Math.max(Math.floor((this.getLeft(thing) - this.left) / this.quadrantWidth), 0);
     }
-    
+
     /**
      * @param {Thing} thing
      * @param {Number} The index of the last column the Thing is inside.

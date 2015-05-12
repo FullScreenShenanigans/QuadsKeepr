@@ -600,7 +600,7 @@ class QuadsKeepr {
             }
         }
 
-        things.forEach(this.determineThingQuadrants);
+        things.forEach(this.determineThingQuadrants.bind(this));
     }
 
     /**

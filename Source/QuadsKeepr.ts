@@ -1,11 +1,11 @@
-/// <reference path="ObjectMakr/ObjectMakr.ts" />
+/// <reference path="ObjectMakr.d.ts" />
 
 module QuadsKeepr {
     "use strict";
 
     export interface IQuadsKeeprSettings {
         // An ObjectMakr used to create Quadrants.
-        ObjectMaker: ObjectMakr.ObjectMakr;
+        ObjectMaker: ObjectMakr.IObjectMakr;
 
         // How many QuadrantRows to keep at a time.
         numRows: number;
@@ -139,7 +139,7 @@ module QuadsKeepr {
         left: number;
 
         // The ObjectMakr factory used to create Quadrant objects.
-        private ObjectMaker: ObjectMakr.ObjectMakr;
+        private ObjectMaker: ObjectMakr.IObjectMakr;
 
         // How many rows and columns of Quadrants there should be initially.
         private numRows: number;

@@ -2,7 +2,8 @@
 
 module QuadsKeepr {
     "use strict";
-    interface IQuadsKeeprSettings {
+
+    export interface IQuadsKeeprSettings {
         // An ObjectMakr used to create Quadrants.
         ObjectMaker: ObjectMakr.ObjectMakr;
 
@@ -75,22 +76,22 @@ module QuadsKeepr {
         keyOffsetY?: string;
     }
 
-    interface IThing {
+    export interface IThing {
         top: number;
         right: number;
         bottom: number;
         left: number;
     }
 
-    interface IThingsCollection {
+    export interface IThingsCollection {
         (i: string): IThing[];
     }
 
-    interface IThingsCounter {
+    export interface IThingsCounter {
         (i: string): number;
     }
 
-    interface IQuadrant {
+    export interface IQuadrant {
         top: number;
         right: number;
         bottom: number;
@@ -102,14 +103,14 @@ module QuadsKeepr {
         context: CanvasRenderingContext2D;
     }
 
-    interface IQuadrantCollection {
+    export interface IQuadrantCollection {
         left: number;
         top: number;
         quadrants: IQuadrant[];
     }
 
-    interface IQuadrantRow extends IQuadrantCollection { }
-    interface IQuadrantCol extends IQuadrantCollection { }
+    export interface IQuadrantRow extends IQuadrantCollection { }
+    export interface IQuadrantCol extends IQuadrantCollection { }
 
     interface IQuadrantChangeCallback {
         (direction: string, top: number, right: number, bottom: number, left: number): void;
@@ -124,7 +125,7 @@ module QuadsKeepr {
      * 
      * @author "Josh Goldberg" <josh@fullscreenmario.com>
      */
-    class QuadsKeepr {
+    export class QuadsKeepr {
         // The top boundary for all quadrants.
         top: number;
 

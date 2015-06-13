@@ -1,5 +1,11 @@
-/// <reference path="References/ObjectMakr.d.ts" />
+// @echo '/// <reference path="ObjectMakr-0.2.2.ts" />'
+
+// @ifdef INCLUDE_DEFINITIONS
+/// <reference path="References/ObjectMakr-0.2.2.ts" />
 /// <reference path="QuadsKeepr.d.ts" />
+// @endif
+
+// @include ../Source/QuadsKeepr.d.ts
 
 module QuadsKeepr {
     "use strict";
@@ -10,74 +16,159 @@ module QuadsKeepr {
      * Things are in it, and each Thing knows its quadrants. Operations are 
      * available to shift quadrants horizontally or vertically and add/remove rows
      * and columns.
-     * 
-     * @author "Josh Goldberg" <josh@fullscreenmario.com>
      */
     export class QuadsKeepr implements IQuadsKeepr {
-        // The top boundary for all quadrants.
+        /**
+         * The top boundary for all quadrants.
+         */
         top: number;
 
-        // The right boundary for all quadrants.
+        /**
+         * The right boundary for all quadrants.
+         */
         right: number;
 
-        // The bottom boundary for all quadrants.
+        /**
+         * The bottom boundary for all quadrants.
+         */
         bottom: number;
 
-        // The left boundary for all quadrants.
+        /**
+         * The left boundary for all quadrants.
+         */
         left: number;
 
-        // The ObjectMakr factory used to create Quadrant objects.
+        /**
+         * The ObjectMakr factory used to create Quadrant objects.
+         */
         private ObjectMaker: ObjectMakr.IObjectMakr;
 
-        // How many rows and columns of Quadrants there should be initially.
+        /**
+         * How many rows of Quadrants there should be initially.
+         */
         private numRows: number;
+        
+        /**
+         * How many columns of Quadrants there should be initially.
+         */
         private numCols: number;
 
-        // Scrolling offsets during gameplay (initially 0).
+        /**
+         * Horizontal scrolling offset during gameplay.
+         */
         private offsetX: number;
-        private offsetY: number;
-
-        // Starting coordinates for rows & columns.
-        private startLeft: number;
-        private startTop: number;
-
-        // A QuadrantRow[] that holds each QuadrantRow in order.
-        private quadrantRows: IQuadrantRow[];
-
-        // A QuadrantCol[] that holds each QuadrantCol in order.
-        private quadrantCols: IQuadrantCol[];
-
-        // How wide Quadrants should be.
-        private quadrantWidth: number;
-
-        // How tall Quadrants should be.
-        private quadrantHeight: number;
-
-        // Names under which external Things should store information
-        private keyTop: string;
-        private keyRight: string;
-        private keyBottom: string;
-        private keyLeft: string;
-        private keyNumQuads: string;
-        private keyQuadrants: string;
-        private keyChanged: string;
-        private keyToleranceX: string;
-        private keyToleranceY: string;
-        private keyGroupName: string;
-        private keyOffsetX: string;
-        private keyOffsetY: string;
-
-        // An Array of string names a Thing may be placed into 
-        private groupNames: string[];
-
-        // Callback for when Quadrants are added or removed, respectively
-        private onAdd: (direction: string, top: number, right: number, bottom: number, left: number) => void;
-        private onRemove: (direction: string, top: number, right: number, bottom: number, left: number) => void;
 
         /**
-         * Resets the QuadsKeepr.
-         * 
-         * @constructor
+         * Vertical scrolling offset during gameplay.
+         */
+        private offsetY: number;
+
+        /**
+         * Starting coordinates for columns.
+         */
+        private startLeft: number;
+
+        /**
+         * Starting coordinates for rows.
+         */
+        private startTop: number;
+
+        /**
+         * A QuadrantRow[] that holds each QuadrantRow in order.
+         */
+        private quadrantRows: IQuadrantRow[];
+
+        /**
+         * A QuadrantCol[] that holds each QuadrantCol in order.
+         */
+        private quadrantCols: IQuadrantCol[];
+
+        /**
+         * How wide Quadrants should be.
+         */
+        private quadrantWidth: number;
+
+        /**
+         * How tall Quadrants should be.
+         */
+        private quadrantHeight: number;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyTop: string;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyRight: string;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyBottom: string;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyLeft: string;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyNumQuads: string;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyQuadrants: string;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyChanged: string;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyToleranceX: string;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyToleranceY: string;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyGroupName: string;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyOffsetX: string;
+
+        /**
+         * String key under which external Things store their top coordinate.
+         */
+        private keyOffsetY: string;
+
+        /**
+         * The groups Things may be placed into within Quadrants.
+         */
+        private groupNames: string[];
+
+        /**
+         * Callback for when Quadrants are added, called on the area and direction.
+         */
+        private onAdd: IQuadrantChangeCallback;
+
+        /**
+         * Callback for when Quadrants are removed, called on the area and direction.
+         */
+        private onRemove: IQuadrantChangeCallback;
+
+        /**
          * @param {IQuadsKeeprSettings} settings
          */
         constructor(settings: IQuadsKeeprSettings) {
